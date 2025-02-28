@@ -1,10 +1,11 @@
 package main;
 
 import client.ChatRoom;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
+
 import res.Colors;
 
 public class LoginWindow {
@@ -88,7 +89,15 @@ public class LoginWindow {
     private void handleLogin() {
         String username = usernameField.getText().trim();
         if (!username.isEmpty() && ChatRoom.usernames.add(username)) {
-            new ChatRoom(username);
+            loginFrame.setVisible(false);
+            ChatRoom CR = new ChatRoom(username);
+            CR.setVisible(true);
+            CR.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    loginFrame.setVisible(true);
+                }
+            });
             usernameField.setText("");
         } else {
             JOptionPane.showMessageDialog(loginFrame, "Username already taken or invalid!", "Error", JOptionPane.ERROR_MESSAGE);

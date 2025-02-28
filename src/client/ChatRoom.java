@@ -12,9 +12,8 @@ import java.net.Socket;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ChatRoom {
+public class ChatRoom extends JFrame {
     private static final int PORT = 65535;
-    private JFrame frame;
     private JTextArea chatArea;
     private JButton sendButton;
     private JTextField messageField;
@@ -36,12 +35,12 @@ public class ChatRoom {
     }
 
     private void createGUI(String username) {
-        frame = new JFrame("ChatRoom - User: " + username);
-        frame.setSize(800, 500);
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setLayout(new BorderLayout());
-        frame.getContentPane().setBackground(Colors.WHITEBLUE.getAwtColor());
-        frame.setLocationRelativeTo(null);
+        this.setTitle("ChatRoom - User: " + username);
+        this.setSize(800, 500);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.setLayout(new BorderLayout());
+        this.getContentPane().setBackground(Colors.WHITEBLUE.getAwtColor());
+        this.setLocationRelativeTo(null);
 
         // Header panel
         JPanel headerPanel = new JPanel();
@@ -50,7 +49,7 @@ public class ChatRoom {
         JLabel headerLabel = new JLabel("ChatRoom - User: " + username);
         headerLabel.setForeground(Colors.WHITEBLUE.getAwtColor());
         headerPanel.add(headerLabel);
-        frame.add(headerPanel, BorderLayout.NORTH);
+        this.add(headerPanel, BorderLayout.NORTH);
 
         // Chat area
         chatArea = new JTextArea();
@@ -58,11 +57,11 @@ public class ChatRoom {
         chatArea.setLineWrap(true);
         chatArea.setBackground(Colors.WHITEBLUE.getAwtColor());
         chatArea.setFont(new Font("Arial", Font.PLAIN, 16));
-        frame.add(new JScrollPane(chatArea), BorderLayout.CENTER);
+        this.add(new JScrollPane(chatArea), BorderLayout.CENTER);
 
         // Bottom input panel
         JPanel inputPanel = new JPanel(new BorderLayout());
-        inputPanel.setPreferredSize(new Dimension(frame.getWidth(), 35)); // Increase height
+        inputPanel.setPreferredSize(new Dimension(this.getWidth(), 35)); // Increase height
 
         messageField = new JTextField("");
         messageField.setForeground(Colors.LIGHTBLUE.getAwtColor());
@@ -74,9 +73,9 @@ public class ChatRoom {
         sendButton.addActionListener(e -> sendMessage());
         inputPanel.add(messageField, BorderLayout.CENTER);
         inputPanel.add(sendButton, BorderLayout.EAST);
-        frame.add(inputPanel, BorderLayout.SOUTH);
+        this.add(inputPanel, BorderLayout.SOUTH);
 
-        frame.setVisible(true);
+        this.setVisible(true);
     }
 
     private void sendMessage() {
