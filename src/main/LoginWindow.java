@@ -3,11 +3,14 @@ package main;
 import client.ChatRoom;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import res.Colors;
 
 public class LoginWindow {
     private JFrame loginFrame;
     private JTextField usernameField;
+    private JButton loginButton;
 
     public LoginWindow() {
         loginFrame = new JFrame("Login");
@@ -30,7 +33,7 @@ public class LoginWindow {
         gbc.gridwidth = 2;
         loginFrame.add(titleLabel, gbc);
 
-        // Benutzername-Label (Zentriert & volle Breite)
+        // Benutzername-Label (zentriert)
         JLabel label = new JLabel("Enter your username:", SwingConstants.CENTER);
         label.setFont(new Font("Arial", Font.BOLD, 16));
         label.setForeground(Colors.MIDDLEBLUE.getAwtColor());
@@ -50,7 +53,7 @@ public class LoginWindow {
         loginFrame.add(usernameField, gbc);
 
         // Login-Button
-        JButton loginButton = new JButton("Login");
+        loginButton = new JButton("Login");
         loginButton.setFont(new Font("Arial", Font.BOLD, 14));
         loginButton.setPreferredSize(new Dimension(120, 40));
         loginButton.setBackground(Colors.DARKBLUE.getAwtColor());
@@ -60,13 +63,15 @@ public class LoginWindow {
         loginButton.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 
         // Login-Logik
-        loginButton.addActionListener(e -> {
-            String username = usernameField.getText().trim();
-            if (!username.isEmpty() && ChatRoom.usernames.add(username)) {
-                new ChatRoom(username);
-                usernameField.setText("");
-            } else {
-                JOptionPane.showMessageDialog(loginFrame, "Username already taken or invalid!", "Error", JOptionPane.ERROR_MESSAGE);
+        loginButton.addActionListener(e -> handleLogin());
+
+        // KeyListener für die Enter-Taste im Textfeld
+        usernameField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    loginButton.doClick(); // Löst Button-Klick aus
+                }
             }
         });
 
@@ -78,6 +83,16 @@ public class LoginWindow {
         // Fenster zentrieren und anzeigen
         loginFrame.setLocationRelativeTo(null);
         loginFrame.setVisible(true);
+    }
+
+    private void handleLogin() {
+        String username = usernameField.getText().trim();
+        if (!username.isEmpty() && ChatRoom.usernames.add(username)) {
+            new ChatRoom(username);
+            usernameField.setText("");
+        } else {
+            JOptionPane.showMessageDialog(loginFrame, "Username already taken or invalid!", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public static void main(String[] args) {
