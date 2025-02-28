@@ -20,7 +20,7 @@ public class LoginWindow extends JFrame {
         this.getContentPane().setBackground(Colors.WHITEBLUE.getAwtColor());
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 20, 10, 20); // Gleicher Abstand links & rechts
+        gbc.insets = new Insets(10, 20, 10, 20);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.anchor = GridBagConstraints.CENTER;
 
@@ -47,7 +47,8 @@ public class LoginWindow extends JFrame {
         usernameField.setPreferredSize(new Dimension(250, 40));
         usernameField.setBackground(Colors.LIGHTBLUE.getAwtColor());
         usernameField.setForeground(Colors.DARKBLUE.getAwtColor());
-        usernameField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10)); // Abgerundete Optik
+        usernameField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        usernameField.addActionListener(e -> handleLogin());
         gbc.gridy = 2;
         gbc.gridwidth = 2;
         this.add(usernameField, gbc);
@@ -61,19 +62,7 @@ public class LoginWindow extends JFrame {
         loginButton.setFocusPainted(false);
         loginButton.setBorderPainted(false);
         loginButton.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-
-        // Login-Logik
         loginButton.addActionListener(e -> handleLogin());
-
-        // KeyListener für die Enter-Taste im Textfeld
-        usernameField.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    loginButton.doClick(); // Löst Button-Klick aus
-                }
-            }
-        });
 
         // Button unter das Textfeld setzen
         gbc.gridy = 3;

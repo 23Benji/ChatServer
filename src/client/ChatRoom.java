@@ -64,7 +64,8 @@ public class ChatRoom extends JFrame {
         inputPanel.setPreferredSize(new Dimension(this.getWidth(), 35)); // Increase height
 
         messageField = new JTextField("");
-        messageField.setForeground(Colors.LIGHTBLUE.getAwtColor());
+        messageField.setForeground(Color.BLACK);
+        messageField.setFont(new Font("Arial", Font.PLAIN, 16));
         messageField.addActionListener(e -> sendMessage());
 
         sendButton = new JButton("Send");
