@@ -1,7 +1,6 @@
 package main;
 
 import client.ChatRoom;
-
 import javax.swing.*;
 import java.awt.*;
 import res.Colors;
@@ -12,40 +11,55 @@ public class LoginWindow {
 
     public LoginWindow() {
         loginFrame = new JFrame("Login");
-        loginFrame.setSize(300, 150);
+        loginFrame.setSize(500, 250);
         loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        loginFrame.setLayout(new BorderLayout());
-        loginFrame.getContentPane().setBackground(Color.BLACK);
+        loginFrame.setLayout(new GridBagLayout());
+        loginFrame.getContentPane().setBackground(Colors.WHITEBLUE.getAwtColor());
 
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridBagLayout());
-        panel.setBackground(Color.BLACK);
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10); // Padding (top, left, bottom, right)
+        gbc.insets = new Insets(10, 20, 10, 20); // Gleicher Abstand links & rechts
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.CENTER;
 
-        JLabel label = new JLabel("Enter your username:");
-        label.setForeground(Colors.MIDDLEBLUE.getAwtColor());
+        // Überschrift (Titel)
+        JLabel titleLabel = new JLabel("Welcome to ChatServer", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Impact", Font.BOLD, 24));
+        titleLabel.setForeground(Colors.DARKBLUE.getAwtColor());
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.gridwidth = 2; // Span across two columns for the label
-        panel.add(label, gbc);
+        gbc.gridwidth = 2;
+        loginFrame.add(titleLabel, gbc);
 
-        usernameField = new JTextField(15);
-        usernameField.setBackground(Color.BLACK);
-        usernameField.setForeground(Color.WHITE);
+        // Benutzername-Label (Zentriert & volle Breite)
+        JLabel label = new JLabel("Enter your username:", SwingConstants.CENTER);
+        label.setFont(new Font("Arial", Font.BOLD, 16));
+        label.setForeground(Colors.MIDDLEBLUE.getAwtColor());
         gbc.gridy = 1;
-        gbc.gridwidth = 2; // Span across two columns for the text field
-        gbc.fill = GridBagConstraints.HORIZONTAL; // Make the text field fill the available width
-        panel.add(usernameField, gbc);
+        gbc.gridwidth = 2;
+        loginFrame.add(label, gbc);
 
-        loginFrame.add(panel, BorderLayout.CENTER);
+        // Benutzername-Feld
+        usernameField = new JTextField(15);
+        usernameField.setFont(new Font("Arial", Font.PLAIN, 16));
+        usernameField.setPreferredSize(new Dimension(250, 40));
+        usernameField.setBackground(Colors.LIGHTBLUE.getAwtColor());
+        usernameField.setForeground(Colors.DARKBLUE.getAwtColor());
+        usernameField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10)); // Abgerundete Optik
+        gbc.gridy = 2;
+        gbc.gridwidth = 2;
+        loginFrame.add(usernameField, gbc);
 
+        // Login-Button
         JButton loginButton = new JButton("Login");
-        loginButton.setPreferredSize(new Dimension(80, 30));
-        loginButton.setBackground(Color.white);
-        loginButton.setForeground(Color.black);
+        loginButton.setFont(new Font("Arial", Font.BOLD, 14));
+        loginButton.setPreferredSize(new Dimension(120, 40));
+        loginButton.setBackground(Colors.DARKBLUE.getAwtColor());
+        loginButton.setForeground(Color.WHITE);
         loginButton.setFocusPainted(false);
         loginButton.setBorderPainted(false);
+        loginButton.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+
+        // Login-Logik
         loginButton.addActionListener(e -> {
             String username = usernameField.getText().trim();
             if (!username.isEmpty() && ChatRoom.usernames.add(username)) {
@@ -56,12 +70,17 @@ public class LoginWindow {
             }
         });
 
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setBackground(Color.BLACK);
-        buttonPanel.add(loginButton);
-        loginFrame.add(buttonPanel, BorderLayout.SOUTH);
+        // Button unter das Textfeld setzen
+        gbc.gridy = 3;
+        gbc.gridwidth = 2;
+        loginFrame.add(loginButton, gbc);
 
-        loginFrame.setLocationRelativeTo(null); // Center the window
+        // Fenster zentrieren und anzeigen
+        loginFrame.setLocationRelativeTo(null);
         loginFrame.setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new LoginWindow();
     }
 }
