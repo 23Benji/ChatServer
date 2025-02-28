@@ -1,6 +1,6 @@
 package main;
 
-import client.ChatClientGUI;
+import client.ChatRoom;
 
 import javax.swing.*;
 import java.awt.*;
@@ -47,8 +47,8 @@ public class LoginWindow {
         loginButton.setBorderPainted(false);
         loginButton.addActionListener(e -> {
             String username = usernameField.getText().trim();
-            if (!username.isEmpty() && ChatClientGUI.usernames.add(username)) {
-                new ChatClientGUI(username);
+            if (!username.isEmpty() && ChatRoom.usernames.add(username)) {
+                new ChatRoom(username);
                 usernameField.setText("");
             } else {
                 JOptionPane.showMessageDialog(loginFrame, "Username already taken or invalid!", "Error", JOptionPane.ERROR_MESSAGE);

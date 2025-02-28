@@ -12,7 +12,7 @@ import java.net.Socket;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ChatClientGUI {
+public class ChatRoom {
     private static final int PORT = 65535;
     private JFrame frame;
     private JTextArea chatArea;
@@ -20,15 +20,15 @@ public class ChatClientGUI {
     private PrintStream out;
     public static Set<String> usernames = new HashSet<>();
 
-    public ChatClientGUI(String username) {
+    public ChatRoom(String username) {
         try {
-            Socket client = new Socket("localhost", PORT);
+            Socket client = new Socket("192.168.42.166", PORT);
             BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
             out = new PrintStream(client.getOutputStream());
 
             createGUI(username);
             out.println(username);
-            new ChatClientThread(in).start();
+            new ChatClientThread(in,chatArea).start();
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not connect to server", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -63,7 +63,7 @@ public class ChatClientGUI {
     private class ChatClientThread extends Thread {
         private BufferedReader in;
 
-        public ChatClientThread(BufferedReader in) {
+        public ChatClientThread(BufferedReader in, JTextArea chatArea) {
             this.in = in;
         }
 
