@@ -4,6 +4,7 @@ import client.ChatRoom;
 
 import javax.swing.*;
 import java.awt.*;
+import res.Colors;
 
 public class LoginWindow {
     private JFrame loginFrame;
@@ -23,7 +24,7 @@ public class LoginWindow {
         gbc.insets = new Insets(10, 10, 10, 10); // Padding (top, left, bottom, right)
 
         JLabel label = new JLabel("Enter your username:");
-        label.setForeground(Color.WHITE);
+        label.setForeground(Colors.MIDDLEBLUE.getAwtColor());
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2; // Span across two columns for the label
