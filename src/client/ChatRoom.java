@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,7 +28,8 @@ public class ChatRoom extends JFrame {
         try {
             Socket client = new Socket(HOST, PORT);
             BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-            out = new PrintStream(client.getOutputStream());
+            // Use UTF-8 encoding for proper emoji handling
+            out = new PrintStream(client.getOutputStream(), true, StandardCharsets.UTF_8);
 
             createGUI(username);
             out.println(username);
@@ -61,7 +63,6 @@ public class ChatRoom extends JFrame {
         this.getContentPane().setBackground(Colors.WHITEBLUE.getAwtColor());
         this.setLocationRelativeTo(null);
 
-        // Header panel
         JPanel headerPanel = new JPanel();
         headerPanel.setBackground(Colors.DARKBLUE.getAwtColor());
         headerPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -70,29 +71,33 @@ public class ChatRoom extends JFrame {
         headerPanel.add(headerLabel);
         this.add(headerPanel, BorderLayout.NORTH);
 
-        // Chat area
         chatArea = new JTextArea();
         chatArea.setEditable(false);
         chatArea.setLineWrap(true);
         chatArea.setBackground(Colors.WHITEBLUE.getAwtColor());
-        chatArea.setFont(new Font("Arial", Font.PLAIN, 16));
+        // Set a font that supports emojis
+        chatArea.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 16));
         this.add(new JScrollPane(chatArea), BorderLayout.CENTER);
 
-        // Bottom input panel
         JPanel inputPanel = new JPanel(new BorderLayout());
-        inputPanel.setPreferredSize(new Dimension(this.getWidth(), 35)); // Increase height
+        inputPanel.setPreferredSize(new Dimension(this.getWidth(), 35));
+
+        JButton emojiButton = new JButton("😀");
+        emojiButton.addActionListener(e -> showEmojiPicker());
+        inputPanel.add(emojiButton, BorderLayout.WEST);
 
         messageField = new JTextField("");
         messageField.setForeground(Color.BLACK);
-        messageField.setFont(new Font("Arial", Font.PLAIN, 16));
+        messageField.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 16));
         messageField.addActionListener(e -> sendMessage());
+        inputPanel.add(messageField, BorderLayout.CENTER);
 
         sendButton = new JButton("Send");
         sendButton.setBackground(Colors.MIDDLEBLUE.getAwtColor());
         sendButton.setForeground(Color.WHITE);
         sendButton.addActionListener(e -> sendMessage());
-        inputPanel.add(messageField, BorderLayout.CENTER);
         inputPanel.add(sendButton, BorderLayout.EAST);
+
         this.add(inputPanel, BorderLayout.SOUTH);
 
         this.setVisible(true);
@@ -105,7 +110,6 @@ public class ChatRoom extends JFrame {
             messageField.setText("");
         }
     }
-
 
     private class ChatClientThread extends Thread {
         private BufferedReader in;
@@ -126,5 +130,47 @@ public class ChatRoom extends JFrame {
                 SwingUtilities.invokeLater(() -> chatArea.append("Connection lost.\n"));
             }
         }
+    }
+
+    private void showEmojiPicker() {
+        JDialog emojiDialog = new JDialog(this, "Choose Emoji", true);
+        emojiDialog.setLayout(new BorderLayout());
+        JPanel emojiPanel = new JPanel(new GridLayout(0, 5));
+        JScrollPane scrollPane = new JScrollPane(emojiPanel);
+        emojiDialog.add(scrollPane, BorderLayout.CENTER);
+        emojiDialog.setSize(400, 300);
+
+        String[] emojis = {
+                "😀", "😃", "😄", "😁", "😆", "😅", "😂", "🤣", "😊", "😇",
+                "🙂", "🙃", "😉", "😌", "😍", "🥰", "😘", "😗", "😙", "😚",
+                "😋", "😛", "😝", "😜", "🤪", "🤨", "🧐", "🤓", "😎", "🤩",
+                "🥳", "😏", "😒", "😞", "😔", "😟", "😕", "🙁", "☹️", "😣",
+                "😖", "😫", "😩", "🥺", "😢", "😭", "😤", "😠", "😡", "🤬",
+                "🤯", "😳", "🥵", "🥶", "😱", "😨", "😰", "😥", "😓", "🤗",
+                "🤔", "🤭", "🤫", "🤥", "😶", "😐", "😑", "😬", "🙄", "😯",
+                "😦", "😧", "😮", "😲", "🥱", "😴", "🤤", "😪", "😵", "🤐",
+                "🥴", "🤢", "🤮", "🤧", "😷", "🤒", "🤕", "🤑", "🤠", "😈",
+                "👿", "👹", "👺", "🤡", "💩", "👻", "💀", "☠️", "👽", "👾",
+                "🤖", "🎃", "😺", "😸", "😹", "😻", "😼", "😽", "🙀", "😿",
+                "😾", "👋", "🤚", "🖐️", "✋", "🖖", "👌", "🤏", "✌️", "🤞",
+                "🤟", "🤘", "🤙", "👈", "👉", "👆", "🖕", "👇", "☝️", "👍",
+                "👎", "✊", "👊", "🤛", "🤜", "👏", "🙌", "👐", "🤲", "🤝",
+                "🙏", "✍️", "💅", "🤳", "💪", "🦾", "🦿", "🦵", "🦶", "👂",
+                "🦻", "👃", "🧠", "🦷", "🦴", "👀", "👁️", "👅", "👄", "🦋"
+        };
+
+        // Add emoji buttons to the emoji panel
+        for (String emoji : emojis) {
+            JButton btn = new JButton(emoji);
+            btn.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 16));
+            btn.addActionListener(e -> {
+                messageField.setText(messageField.getText() + emoji);
+                emojiDialog.dispose();
+            });
+            emojiPanel.add(btn);
+        }
+
+        emojiDialog.setLocationRelativeTo(this);
+        emojiDialog.setVisible(true);
     }
 }

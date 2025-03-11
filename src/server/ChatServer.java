@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class ChatServer {
@@ -57,7 +58,9 @@ public class ChatServer {
 
         public ChatServerThread(Socket client) throws IOException {
             this.client = client;
-            in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+            //in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+            // Replace the existing in initialization with:
+            in = new BufferedReader(new InputStreamReader(client.getInputStream(), StandardCharsets.UTF_8));
             out = new PrintStream(client.getOutputStream());
         }
 
