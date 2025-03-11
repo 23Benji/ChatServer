@@ -14,6 +14,7 @@ import java.util.Set;
 
 public class ChatRoom extends JFrame {
     private static final int PORT = 65535;
+    private static final String HOST = "10.216.220.164";
     private JTextArea chatArea;
     private JButton sendButton;
     private JTextField messageField;
@@ -22,7 +23,7 @@ public class ChatRoom extends JFrame {
 
     public ChatRoom(String username) {
         try {
-            Socket client = new Socket("192.168.42.166", PORT);
+            Socket client = new Socket(HOST, PORT);
             BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
             out = new PrintStream(client.getOutputStream());
 

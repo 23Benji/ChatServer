@@ -5,12 +5,14 @@ import client.ChatRoom;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 import res.Colors;
 
 public class LoginWindow extends JFrame {
     private JTextField usernameField;
     private JButton loginButton;
+    private static ArrayList<String> users= new ArrayList<>();
 
     public LoginWindow() {
         this.setTitle("Login");
@@ -75,7 +77,8 @@ public class LoginWindow extends JFrame {
 
     private void handleLogin() {
         String username = usernameField.getText().trim();
-        if (!username.isEmpty() && ChatRoom.usernames.add(username)) {
+        if (!username.isEmpty() && !users.contains(username)) {
+            users.add(username);
             this.setVisible(false);
             ChatRoom CR = new ChatRoom(username);
             CR.setVisible(true);
