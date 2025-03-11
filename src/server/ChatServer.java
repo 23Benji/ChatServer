@@ -63,28 +63,32 @@ public class ChatServer {
 
         @Override
         public void run() {
+            String name = null;
             try {
                 addOutputStream(out);
-                String name = in.readLine();
+                name = in.readLine();
                 System.out.println(name + " signed in. " + outputStreams.size() + " users");
                 broadcastMessage(name + " signed in successfully");
 
                 String line;
                 while ((line = in.readLine()) != null) {
+                    if (line.startsWith("/logout")) {
+                        break;  // Exit loop if user logs out
+                    }
                     broadcastMessage(name + ": " + line);
                 }
-
-                removeOutputStream(out);
-                System.out.println(name + " signed out. " + outputStreams.size() + " users");
-                broadcastMessage(name + " signed out");
             } catch (IOException e) {
                 System.out.println(e.getClass().getName() + ": " + e.getMessage());
-                e.printStackTrace();
             } finally {
+                removeOutputStream(out);
+                if (name != null) {
+                    System.out.println(name + " signed out. " + outputStreams.size() + " users");
+                    broadcastMessage(name + " signed out");
+                }
                 try {
                     client.close();
                 } catch (Exception e1) {
-                    // Ignorieren
+                    e1.printStackTrace();
                 }
             }
         }
