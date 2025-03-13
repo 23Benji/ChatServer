@@ -17,7 +17,7 @@ import java.util.Set;
 
 public class ChatRoom extends JFrame {
     private static final int PORT = 65535;
-    private static final String HOST = "localhost";
+    private static final String HOST = "192.168.28.166";
     private JTextPane chatArea;
     private JButton sendButton;
     private JTextField messageField;

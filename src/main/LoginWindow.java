@@ -86,6 +86,7 @@ public class LoginWindow extends JFrame {
                 @Override
                 public void windowClosed(WindowEvent e) {
                     setVisible(true);
+                    users.remove(username);
                 }
             });
             usernameField.setText("");
