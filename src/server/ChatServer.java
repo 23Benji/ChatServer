@@ -31,9 +31,7 @@ public class ChatServer {
         } finally {
             try {
                 if (server != null) server.close();
-            } catch (Exception e1) {
-                // Ignorieren
-            }
+            } catch (Exception e1) {}
         }
     }
 
@@ -55,38 +53,41 @@ public class ChatServer {
         private Socket client;
         private BufferedReader in;
         private PrintStream out;
+        private String name;
 
         public ChatServerThread(Socket client) throws IOException {
             this.client = client;
-            //in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-            // Replace the existing in initialization with:
             in = new BufferedReader(new InputStreamReader(client.getInputStream(), StandardCharsets.UTF_8));
             out = new PrintStream(client.getOutputStream());
         }
 
         @Override
         public void run() {
-            String name = null;
             try {
                 addOutputStream(out);
                 name = in.readLine();
-                System.out.println(name + " signed in. " + outputStreams.size() + " users");
                 broadcastMessage(name + " signed in successfully");
+                broadcastMessage("/userscount " + outputStreams.size());
 
                 String line;
                 while ((line = in.readLine()) != null) {
                     if (line.startsWith("/logout")) {
-                        break;  // Exit loop if user logs out
+                        break;
+                    } else if (line.equals("/typing")) {
+                        broadcastMessage("/typing " + name);
+                    } else if (line.equals("/stoptyping")) {
+                        broadcastMessage("/stoptyping " + name);
+                    } else {
+                        broadcastMessage(name + ": " + line);
                     }
-                    broadcastMessage(name + ": " + line);
                 }
             } catch (IOException e) {
                 System.out.println(e.getClass().getName() + ": " + e.getMessage());
             } finally {
                 removeOutputStream(out);
                 if (name != null) {
-                    System.out.println(name + " signed out. " + outputStreams.size() + " users");
                     broadcastMessage(name + " signed out");
+                    broadcastMessage("/userscount " + outputStreams.size());
                 }
                 try {
                     client.close();
