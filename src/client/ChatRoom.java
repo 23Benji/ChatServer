@@ -164,7 +164,7 @@ public class ChatRoom extends JFrame {
         // Add emoji buttons to the emoji panel
         for (String emoji : emojis) {
             JButton btn = new JButton(emoji);
-            btn.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 16));
+            btn.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 14));
             btn.addActionListener(e -> {
                 messageField.setText(messageField.getText() + emoji);
                 messageField.requestFocusInWindow(); // Refocus input field
