@@ -8,6 +8,8 @@ public enum Colors {
     LIGHTBLUE(161, 227, 249),
     WHITEBLUE(209, 248, 239);
 
+    
+
     private final Color awtColor;
 
     Colors(int r, int g, int b) {

@@ -17,7 +17,7 @@ import java.util.Set;
 
 public class ChatRoom extends JFrame {
     private static final int PORT = 65535;
-    private static final String HOST = "10.216.220.164";
+    private static final String HOST = "192.168.28.166";
     private JTextArea chatArea;
     private JButton sendButton;
     private JTextField messageField;
@@ -83,7 +83,7 @@ public class ChatRoom extends JFrame {
         inputPanel.setPreferredSize(new Dimension(this.getWidth(), 35));
 
         JButton emojiButton = new JButton("😀");
-        emojiButton.addActionListener(e -> showEmojiPicker());
+        emojiButton.addActionListener(e ->{ showEmojiPicker();});
         inputPanel.add(emojiButton, BorderLayout.WEST);
 
         messageField = new JTextField("");
@@ -101,6 +101,8 @@ public class ChatRoom extends JFrame {
         this.add(inputPanel, BorderLayout.SOUTH);
 
         this.setVisible(true);
+
+        SwingUtilities.invokeLater(() -> messageField.requestFocusInWindow());
     }
 
     private void sendMessage() {
@@ -165,6 +167,7 @@ public class ChatRoom extends JFrame {
             btn.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 16));
             btn.addActionListener(e -> {
                 messageField.setText(messageField.getText() + emoji);
+                messageField.requestFocusInWindow(); // Refocus input field
                 emojiDialog.dispose();
             });
             emojiPanel.add(btn);
