@@ -14,10 +14,11 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Set;
+import res.EmojiList;
 
 public class ChatRoom extends JFrame {
-    private static final int PORT = 65535;
-    private static final String HOST = "192.168.28.166";
+    private static int PORT = 65535;
+    private static String HOST ="localhost";
     private JTextPane chatArea;
     private JButton sendButton;
     private JTextField messageField;
@@ -64,7 +65,7 @@ public class ChatRoom extends JFrame {
     }
 
     private void createGUI(String username) {
-        this.setTitle("ChatRoom - User: " + username);
+        this.setTitle("ChatRoom" + username);
         this.setSize(800, 500);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setLayout(new BorderLayout());
@@ -73,8 +74,9 @@ public class ChatRoom extends JFrame {
 
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(Colors.DARKBLUE.getAwtColor());
+        headerPanel.setSize(800, 200);
 
-        JLabel headerLabel = new JLabel("ChatRoom - User: " + username);
+        JLabel headerLabel = new JLabel("User: " + username);
         headerLabel.setForeground(Colors.WHITEBLUE.getAwtColor());
         headerPanel.add(headerLabel, BorderLayout.WEST);
 
@@ -134,6 +136,23 @@ public class ChatRoom extends JFrame {
         this.setVisible(true);
         SwingUtilities.invokeLater(() -> messageField.requestFocusInWindow());
     }
+
+    public static void setHOST(String HOST) {
+        ChatRoom.HOST = HOST;
+    }
+    public static String getHOST() {
+        return HOST;
+    }
+
+    public static void setPORT(int PORT) {
+        ChatRoom.PORT=PORT;
+    }
+
+    public static int getPORT() {
+        return PORT;
+    }
+
+
 
     private void sendMessage() {
         String message = messageField.getText().trim();
@@ -208,7 +227,6 @@ public class ChatRoom extends JFrame {
         }
     }
 
-    // Restored original emoji picker with your emoji list
     private void showEmojiPicker() {
         JDialog emojiDialog = new JDialog(this, "Choose Emoji", true);
         emojiDialog.setLayout(new BorderLayout());
@@ -216,27 +234,7 @@ public class ChatRoom extends JFrame {
         JScrollPane scrollPane = new JScrollPane(emojiPanel);
         emojiDialog.add(scrollPane, BorderLayout.CENTER);
         emojiDialog.setSize(400, 300);
-
-        String[] emojis = {
-                "😀", "😃", "😄", "😁", "😆", "😅", "😂", "🤣", "😊", "😇",
-                "🙂", "🙃", "😉", "😌", "😍", "🥰", "😘", "😗", "😙", "😚",
-                "😋", "😛", "😝", "😜", "🤪", "🤨", "🧐", "🤓", "😎", "🤩",
-                "🥳", "😏", "😒", "😞", "😔", "😟", "😕", "🙁", "☹️", "😣",
-                "😖", "😫", "😩", "🥺", "😢", "😭", "😤", "😠", "😡", "🤬",
-                "🤯", "😳", "🥵", "🥶", "😱", "😨", "😰", "😥", "😓", "🤗",
-                "🤔", "🤭", "🤫", "🤥", "😶", "😐", "😑", "😬", "🙄", "😯",
-                "😦", "😧", "😮", "😲", "🥱", "😴", "🤤", "😪", "😵", "🤐",
-                "🥴", "🤢", "🤮", "🤧", "😷", "🤒", "🤕", "🤑", "🤠", "😈",
-                "👿", "👹", "👺", "🤡", "💩", "👻", "💀", "☠️", "👽", "👾",
-                "🤖", "🎃", "😺", "😸", "😹", "😻", "😼", "😽", "🙀", "😿",
-                "😾", "👋", "🤚", "🖐️", "✋", "🖖", "👌", "🤏", "✌️", "🤞",
-                "🤟", "🤘", "🤙", "👈", "👉", "👆", "🖕", "👇", "☝️", "👍",
-                "👎", "✊", "👊", "🤛", "🤜", "👏", "🙌", "👐", "🤲", "🤝",
-                "🙏", "✍️", "💅", "🤳", "💪", "🦾", "🦿", "🦵", "🦶", "👂",
-                "🦻", "👃", "🧠", "🦷", "🦴", "👀", "👁️", "👅", "👄", "🦋"
-        };
-
-        for (String emoji : emojis) {
+        for (String emoji : EmojiList.EMOJIS) {
             JButton btn = new JButton(emoji);
             btn.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 14));
             btn.addActionListener(e -> {
