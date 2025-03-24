@@ -1,7 +1,11 @@
 # 🖥️ ChatServer  
+<img src="screenshots/scr1.png" alt="ChatServer Screenshot" width="500" align="right">
 
-**A simple and customizable chat application with client-server architecture.**  
-![ChatServer Screenshot](./assets/chatserver_screenshot.png)
+**A simple and customizable chat application with a client-server architecture, designed for real-time communication.**  
+
+ChatServer allows multiple users to connect to a central server and exchange messages in real-time. It features a modern, easy-to-use interface and includes customization options for server connection settings. The application is built with Java and utilizes Swing for the graphical interface.  
+
+Whether you're looking for a lightweight chat solution or a foundation for building more advanced networking applications, ChatServer provides a solid starting point!  
 
 ## 📌 Features  
 ✅ **User Authentication** – Users can log in with a unique username.  
